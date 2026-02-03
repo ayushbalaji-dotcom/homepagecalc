@@ -129,6 +129,30 @@ def main():
                 st.success(f"Uploaded {filename}.")
                 st.rerun()
 
+        st.divider()
+        st.subheader("Delete Calculator")
+        existing_files = [
+            f
+            for f in sorted(os.listdir(CALCULATORS_DIR))
+            if f.endswith(".json")
+        ] if os.path.isdir(CALCULATORS_DIR) else []
+
+        if not existing_files:
+            st.caption("No calculators to delete.")
+        else:
+            delete_target = st.selectbox("Select calculator to delete", existing_files)
+            confirm_delete = st.checkbox("I understand this will delete the file")
+            if st.button("Delete selected"):
+                if not confirm_delete:
+                    st.warning("Please confirm deletion first.")
+                else:
+                    try:
+                        os.remove(os.path.join(CALCULATORS_DIR, delete_target))
+                        st.success(f"Deleted {delete_target}.")
+                        st.rerun()
+                    except OSError as exc:
+                        st.error(f"Failed to delete: {exc}")
+
     calculators = load_calculators()
     if not calculators:
         st.info("No calculators found. Add JSON files to the calculators/ folder.")
@@ -158,3 +182,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
