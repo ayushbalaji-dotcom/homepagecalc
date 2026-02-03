@@ -1,0 +1,74 @@
+{
+  "name": "New Tool",
+  "description": "",
+  "inputs": [
+    {
+      "id": "Vaccine_yes_no",
+      "label": "You want?",
+      "type": "select",
+      "options": [
+        "Yes",
+        "No",
+        "Unknown"
+      ]
+    },
+    {
+      "id": "Allergy_yes_no",
+      "label": "You allergic?",
+      "type": "select",
+      "options": [
+        "Yes",
+        "No",
+        "Unknown"
+      ]
+    }
+  ],
+  "scoring_rules": [
+    {
+      "input_id": "Allergy_yes_no",
+      "favor_values": [
+        "Yes"
+      ],
+      "against_values": [
+        "No"
+      ],
+      "invert_favor": true,
+      "weight": 10
+    }
+  ],
+  "rules": [
+    {
+      "name": "Success",
+      "level": "info",
+      "message": "Get Vaccinated",
+      "conditions": [
+        {
+          "input_id": "Vaccine_yes_no",
+          "op": "equals",
+          "value": "Yes"
+        },
+        {
+          "input_id": "Allergy_yes_no",
+          "op": "equals",
+          "value": "No"
+        }
+      ]
+    },
+    {
+      "name": "Oh_No",
+      "level": "error",
+      "message": "No DONT GET",
+      "conditions": [
+        {
+          "input_id": "Allergy_yes_no",
+          "op": "equals",
+          "value": "Yes"
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "level": "warning",
+    "message": "No rules matched."
+  }
+}
